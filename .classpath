@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="enums/" kind="src" path="src/main/model"/>
+	<classpathentry kind="src" path="src/main/model/enums"/>
+	<classpathentry kind="src" path="src/main/service"/>
+	<classpathentry kind="src" path="src/main/util"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/exception"/>
+	<classpathentry kind="lib" path="C:/Users/berna/Downloads/Instalações aula Mockito/Instalações aula Mockito/mockito-junit-jupiter-5.11.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/berna/Downloads/Instalações aula Mockito/Instalações aula Mockito/byte-buddy-1.14.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/berna/Downloads/Instalações aula Mockito/Instalações aula Mockito/byte-buddy-agent-1.14.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/berna/Downloads/Instalações aula Mockito/Instalações aula Mockito/mockito-core-5.19.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
