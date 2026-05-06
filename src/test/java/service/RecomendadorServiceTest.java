@@ -1,7 +1,12 @@
 package service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Spy;
 
 import java.util.*;
 
@@ -12,29 +17,36 @@ import model.*;
 import model.enums.*;
 import util.GeradorAleatorio;
 
+@ExtendWith(MockitoExtension.class)
 class RecomendadorServiceTest {
 
-    private CatalogoFilmesAPI catalogo;
-    private HistoricoUsuarioRepository historico;
-    private NotificadorPush notificador;
-    private GeradorAleatorio gerador;
+	@Mock
+	private CatalogoFilmesAPI catalogo;
+
+	@Mock
+	private HistoricoUsuarioRepository historico;
+
+	@Mock
+	private NotificadorPush notificador;
+
+	@Mock
+	private GeradorAleatorio gerador;
+	
+	@Spy
+	private CalculadoraScore calculadora = new CalculadoraScore();
 
     private RecomendadorService service;
+    
     private Usuario usuario;
 
     @BeforeEach
     void setUp() {
-        catalogo = mock(CatalogoFilmesAPI.class);
-        historico = mock(HistoricoUsuarioRepository.class);
-        notificador = mock(NotificadorPush.class);
-        gerador = mock(GeradorAleatorio.class);
-
         service = new RecomendadorService(
             catalogo,
             historico,
             notificador,
             gerador,
-            new CalculadoraScore(),
+            calculadora,
             new FiltroFilmes()
         );
 
@@ -126,5 +138,52 @@ class RecomendadorServiceTest {
 
         assertNotNull(resultado);
         assertEquals("F2", resultado.getFilme().getId());
+    }
+    @Test
+    void deve_CapturarRecomendacoesRegistradas_Quando_Recomendar() {
+        when(catalogo.buscarTodos()).thenReturn(List.of(
+            new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
+            new Filme("F2", "Filme 2", 100, List.of(Genero.DRAMA),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80),
+            new Filme("F3", "Filme 3", 100, List.of(Genero.ACAO),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+        ));
+
+        ArgumentCaptor<List<Recomendacao>> captor = ArgumentCaptor.forClass(List.class);
+
+        service.recomendar(usuario, 2);
+
+        verify(historico).registrarRecomendacao(eq(usuario), captor.capture());
+
+        List<Recomendacao> registradas = captor.getValue();
+
+        assertAll(
+            () -> assertEquals(2, registradas.size()),
+            () -> assertNotNull(registradas.get(0).getFilme()),
+            () -> assertTrue(registradas.get(0).getScore() >= registradas.get(1).getScore())
+        );
+    }
+    @Test
+    void deve_ChamarCalculadora_ParaCadaFilmeFiltrado() {
+
+        when(catalogo.buscarTodos()).thenReturn(List.of(
+            new Filme("F1", "Filme 1", 100,
+                List.of(Genero.ACAO),
+                ClassificacaoEtaria.DEZESSEIS,
+                Idioma.INGLES,
+                70),
+
+            new Filme("F2", "Filme 2", 100,
+                List.of(Genero.DRAMA),
+                ClassificacaoEtaria.DEZESSEIS,
+                Idioma.INGLES,
+                80)
+        ));
+
+        service.recomendar(usuario, 2);
+
+        verify(calculadora, times(2))
+            .calcular(any(Filme.class), eq(usuario.getPerfil()));
     }
 }
