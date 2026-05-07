@@ -1,8 +1,8 @@
 package service;
 
+import enums.Genero;
 import model.Filme;
 import model.PerfilCinefilo;
-import model.enums.Genero;
 
 public class CalculadoraScore {
 

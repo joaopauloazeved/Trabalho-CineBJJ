@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import enums.ClassificacaoEtaria;
+import enums.Genero;
+import enums.Idioma;
 import exception.PesoInvalidoException;
 import exception.DuracaoInvalidaException;
-
-import model.enums.ClassificacaoEtaria;
-import model.enums.Genero;
-import model.enums.Idioma;
 
 	public class PerfilCinefilo {
 

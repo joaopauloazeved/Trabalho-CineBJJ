@@ -3,11 +3,11 @@ package model;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import enums.ClassificacaoEtaria;
+import enums.Genero;
+import enums.Idioma;
 
-import model.enums.ClassificacaoEtaria;
-import model.enums.Genero;
-import model.enums.Idioma;
+import java.util.List;
 
 class FilmeTest {
 

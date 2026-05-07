@@ -3,9 +3,9 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import enums.Genero;
 import model.Filme;
 import model.PerfilCinefilo;
-import model.enums.Genero;
 
 public class FiltroFilmes {
 

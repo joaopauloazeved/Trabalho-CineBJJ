@@ -1,12 +1,16 @@
 package service;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
+
+import enums.ClassificacaoEtaria;
+import enums.Genero;
+import enums.Idioma;
 
 import java.util.*;
 
 import model.*;
-import model.enums.*;
 
 class CalculadoraScoreTest {
 	

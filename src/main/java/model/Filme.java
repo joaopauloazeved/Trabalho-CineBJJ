@@ -1,9 +1,9 @@
 package model;
 import java.util.List;
 
-import model.enums.ClassificacaoEtaria;
-import model.enums.Genero;
-import model.enums.Idioma;
+import enums.ClassificacaoEtaria;
+import enums.Genero;
+import enums.Idioma;
 
 public class Filme {
 

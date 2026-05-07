@@ -3,12 +3,13 @@ package model;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
+import enums.ClassificacaoEtaria;
+import enums.Genero;
+import enums.Idioma;
 
-import model.enums.*;
-import exception.PesoInvalidoException;
 import exception.DuracaoInvalidaException;
 
+import java.util.*;
 class PerfilCinefiloTest {
 
     @Test
