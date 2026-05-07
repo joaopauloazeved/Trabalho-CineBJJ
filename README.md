@@ -1,4 +1,4 @@
-# CineMatch
+# CineBJJ
 
 Sistema de recomendação de filmes desenvolvido em Java.
 
