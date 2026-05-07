@@ -71,6 +71,6 @@ public class CalculadoraScore {
             count++;
         }
 
-        return (soma / count) * 20; // normaliza pra 0–100
+        return (soma / count) * 20; 
     }
 }
