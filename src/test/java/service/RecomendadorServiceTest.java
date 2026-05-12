@@ -48,7 +48,7 @@ class RecomendadorServiceTest {
             notificador,
             gerador,
             calculadora,
-            new FiltroFilmes()
+            new FiltroFilmes(), null
         );
 
         Map<Genero, Double> pesos = new HashMap<>();
@@ -86,11 +86,11 @@ class RecomendadorServiceTest {
     void deve_RetornarTopN_Quando_CatalogoTemMaisFilmes() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
             new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70, false, 0, 0),
             new Filme("F2", "Filme 2", 100, List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80, false, 0, 0),
             new Filme("F3", "Filme 3", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90, false, 0, 0)
         ));
 
         List<Recomendacao> resultado = service.recomendar(usuario, 2);
@@ -103,9 +103,9 @@ class RecomendadorServiceTest {
     void deve_OrdenarPorScoreDesc_Quando_Recomendar() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
             new Filme("F1", "Baixo", 100, List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 50),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 50, false, 0, 0),
             new Filme("F2", "Alto", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90, false, 0, 0)
         ));
 
         List<Recomendacao> resultado = service.recomendar(usuario, 2);
@@ -128,9 +128,9 @@ class RecomendadorServiceTest {
     void deve_RetornarFilmeAleatorio_Quando_SurpreendaMe() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
             new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70, false, 0, 0),
             new Filme("F2", "Filme 2", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80)
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80, false, 0, 0)
         ));
 
         when(gerador.sortearInteiro(0, 1)).thenReturn(1);
@@ -144,11 +144,11 @@ class RecomendadorServiceTest {
     void deve_CapturarRecomendacoesRegistradas_Quando_Recomendar() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
             new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70, false, 0, 0),
             new Filme("F2", "Filme 2", 100, List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80),
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80, false, 0, 0),
             new Filme("F3", "Filme 3", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90, false, 0, 0)
         ));
 
         ArgumentCaptor<List<Recomendacao>> captor = ArgumentCaptor.forClass(List.class);
@@ -173,13 +173,13 @@ class RecomendadorServiceTest {
                 List.of(Genero.ACAO),
                 ClassificacaoEtaria.DEZESSEIS,
                 Idioma.INGLES,
-                70),
+                70, false, 0, 0),
 
             new Filme("F2", "Filme 2", 100,
                 List.of(Genero.DRAMA),
                 ClassificacaoEtaria.DEZESSEIS,
                 Idioma.INGLES,
-                80)
+                80, false, 0, 0)
         ));
 
         service.recomendar(usuario, 2);

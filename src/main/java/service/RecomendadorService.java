@@ -18,19 +18,22 @@ public class RecomendadorService {
     private final GeradorAleatorio gerador;
     private final CalculadoraScore calculadora;
     private final FiltroFilmes filtro;
+    private final FiltroCapsulaTempo filtroCapsula;
 
     public RecomendadorService(CatalogoFilmesAPI catalogo,
                                HistoricoUsuarioRepository historico,
                                NotificadorPush notificador,
                                GeradorAleatorio gerador,
                                CalculadoraScore calculadora,
-                               FiltroFilmes filtro) {
+                               FiltroFilmes filtro,
+                               FiltroCapsulaTempo filtroCapsula) {
         this.catalogo = catalogo;
         this.historico = historico;
         this.notificador = notificador;
         this.gerador = gerador;
         this.calculadora = calculadora;
         this.filtro = filtro;
+        this.filtroCapsula = filtroCapsula;
     }
 
     public List<Recomendacao> recomendar(Usuario usuario, int topN) {
@@ -92,4 +95,65 @@ public class RecomendadorService {
 
         return new Recomendacao(escolhido, score, "Modo surpresa");
     }
+    
+    public List<Recomendacao> recomendarPorAno(Usuario usuario,
+            int ano,
+            int topN) {
+
+    	List<Filme> filmesDoCatalogo = catalogo.buscarTodos();
+
+    		PerfilCinefilo perfil = usuario.getPerfil();
+
+		List<Filme> filmesFiltrados =
+			filtro.filtrar(filmesDoCatalogo, perfil);
+			
+		List<Filme> filmesDoAno =
+			filtroCapsula.filtrarPorAno(filmesFiltrados, ano);
+			
+		List<Recomendacao> recomendacoes = new ArrayList<>();
+			
+		for (Filme filme : filmesDoAno) {
+			double score = calculadora.calcular(filme, perfil);
+			
+			recomendacoes.add(
+			new Recomendacao(filme,score,"Cápsula do Tempo: " + ano));
+			}
+			
+			recomendacoes.sort(Comparator.comparing(Recomendacao::getScore).reversed().thenComparing(r -> r.getFilme().getAvaliacao(),Comparator.reverseOrder()).thenComparing(r -> r.getFilme().getPopularidade(),Comparator.reverseOrder()));
+			
+			if (recomendacoes.size() > topN) {
+				return new ArrayList<>(recomendacoes.subList(0, topN));
+			}
+			
+				return recomendacoes;
+}
+    public List<Recomendacao> recomendarPorDecada(Usuario usuario,
+            int decada,
+            int topN) {
+
+    	List<Filme> filmesDoCatalogo = catalogo.buscarTodos();
+
+    	PerfilCinefilo perfil = usuario.getPerfil();
+
+    	List<Filme> filmesFiltrados = filtro.filtrar(filmesDoCatalogo, perfil);
+
+    	List<Filme> filmesDaDecada =filtroCapsula.filtrarPorDecada(filmesFiltrados,decada);
+
+    	List<Recomendacao> recomendacoes = new ArrayList<>();
+
+    	for (Filme filme : filmesDaDecada) {
+
+    		double score = calculadora.calcular(filme, perfil);
+
+    		recomendacoes.add(new Recomendacao(filme,score,"Cápsula do Tempo: década de " + decada));
+}
+
+    	recomendacoes.sort(Comparator.comparing(Recomendacao::getScore).reversed().thenComparing(r -> r.getFilme().getAvaliacao(),Comparator.reverseOrder()).thenComparing(r -> r.getFilme().getPopularidade(),Comparator.reverseOrder()));
+
+    	if (recomendacoes.size() > topN) {
+    		return new ArrayList<>(recomendacoes.subList(0, topN));
+    	}
+
+    	return recomendacoes;
+    	}
 }
