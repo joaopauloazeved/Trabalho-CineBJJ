@@ -126,34 +126,5 @@ public class RecomendadorService {
 			}
 			
 				return recomendacoes;
-}
-    public List<Recomendacao> recomendarPorDecada(Usuario usuario,
-            int decada,
-            int topN) {
-
-    	List<Filme> filmesDoCatalogo = catalogo.buscarTodos();
-
-    	PerfilCinefilo perfil = usuario.getPerfil();
-
-    	List<Filme> filmesFiltrados = filtro.filtrar(filmesDoCatalogo, perfil);
-
-    	List<Filme> filmesDaDecada =filtroCapsula.filtrarPorDecada(filmesFiltrados,decada);
-
-    	List<Recomendacao> recomendacoes = new ArrayList<>();
-
-    	for (Filme filme : filmesDaDecada) {
-
-    		double score = calculadora.calcular(filme, perfil);
-
-    		recomendacoes.add(new Recomendacao(filme,score,"Cápsula do Tempo: década de " + decada));
-}
-
-    	recomendacoes.sort(Comparator.comparing(Recomendacao::getScore).reversed().thenComparing(r -> r.getFilme().getAvaliacao(),Comparator.reverseOrder()).thenComparing(r -> r.getFilme().getPopularidade(),Comparator.reverseOrder()));
-
-    	if (recomendacoes.size() > topN) {
-    		return new ArrayList<>(recomendacoes.subList(0, topN));
-    	}
-
-    	return recomendacoes;
-    	}
+    }
 }

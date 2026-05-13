@@ -20,23 +20,4 @@ public class FiltroCapsulaTempo {
 
         return resultado;
     }
-
-    public List<Filme> filtrarPorDecada(List<Filme> filmes, int decada) {
-
-        List<Filme> resultado = new ArrayList<>();
-
-        int inicio = decada;
-        int fim = decada + 9;
-
-        for (Filme filme : filmes) {
-
-            int ano = filme.getAnoLancamento();
-
-            if (ano >= inicio && ano <= fim) {
-                resultado.add(filme);
-            }
-        }
-
-        return resultado;
-    }
 }

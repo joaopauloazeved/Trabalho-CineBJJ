@@ -193,24 +193,6 @@ class RecomendadorServiceTest {
         verify(filtroCapsula).filtrarPorAno(anyList(), eq(2010));
     }
 
-    @Test
-    void deve_ChamarFiltroCapsulaPorDecada_Quando_RecomendarPorDecada() {
-        Filme filme = criarFilme("F1", "Filme 1995", Genero.ACAO, 80, 1995, 8.5);
-
-        when(catalogo.buscarTodos()).thenReturn(List.of(filme));
-
-        when(filtroCapsula.filtrarPorDecada(anyList(), eq(1990)))
-            .thenReturn(List.of(filme));
-
-        List<Recomendacao> resultado =
-            service.recomendarPorDecada(usuario, 1990, 5);
-
-        assertEquals(1, resultado.size());
-        assertNotNull(resultado.get(0));
-
-        verify(filtroCapsula).filtrarPorDecada(anyList(), eq(1990));
-    }
-
     private Filme criarFilme(
         String id,
         String titulo,

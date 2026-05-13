@@ -29,22 +29,6 @@
 	        assertEquals("F1", resultado.get(0).getId());
 	    }
 
-	    @Test
-	    void deve_RetornarApenasFilmesDaDecadaInformada() {
-	        FiltroCapsulaTempo filtroCapsula = new FiltroCapsulaTempo();
-	        
-	        Filme filme1995 = criarFilme("F1", "Filme 1995", 1995);
-	        Filme filme2001 = criarFilme("F2", "Filme 2001", 2001);
-
-	        List<Filme> resultado = filtroCapsula.filtrarPorDecada(
-	            List.of(filme1995, filme2001), 
-	            1990
-	        );
-
-	        assertEquals(1, resultado.size());
-	        assertEquals("F1", resultado.get(0).getId());
-	    }
-
 	    private Filme criarFilme(String id, String titulo, int ano) {
 	        return new Filme(
 	            id,

@@ -15,10 +15,10 @@ public class Main {
         CatalogoFilmesAPI catalogo = criarCatalogo();
 
         HistoricoUsuarioRepository historico = (usuario, recomendacoes) ->
-            System.out.println("\n[Histórico] Recomendações registradas para " + usuario.getNome());
+            System.out.println("|\nHistórico| Recomendações registradas para " + usuario.getNome());
 
         NotificadorPush notificador = (usuario, mensagem) ->
-            System.out.println("[Push] " + mensagem);
+            System.out.println( "" + mensagem);
 
         GeradorAleatorio gerador = (min, max) -> min;
 
@@ -44,9 +44,8 @@ public class Main {
             System.out.println("1 - Ver recomendações");
             System.out.println("2 - Surpreenda-me");
             System.out.println("3 - Cápsula do Tempo por ano");
-            System.out.println("4 - Cápsula do Tempo por década");
-            System.out.println("5 - Marcar filme como assistido");
-            System.out.println("6 - Avaliar filme");
+            System.out.println("4 - Marcar filme como assistido");
+            System.out.println("5 - Avaliar filme");
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
 
@@ -73,12 +72,6 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.print("Digite a década inicial, ex: 1990: ");
-                    int decada = sc.nextInt();
-                    mostrarRecomendacoes(service.recomendarPorDecada(usuario, decada, 5));
-                    break;
-
-                case 5:
                     System.out.println("\nFilmes disponíveis:");
                     mostrarCatalogo(catalogo.buscarTodos());
 
@@ -89,7 +82,7 @@ public class Main {
                     System.out.println("Filme marcado como assistido.");
                     break;
 
-                case 6:
+                case 5:
                     System.out.println("\nFilmes disponíveis:");
                     mostrarCatalogo(catalogo.buscarTodos());
 
@@ -117,7 +110,7 @@ public class Main {
     }
 
     private static Usuario criarUsuario(Scanner sc) {
-        sc.nextLine();
+    	
 
         System.out.print("\nDigite seu nome: ");
         String nome = sc.nextLine();
@@ -143,7 +136,9 @@ public class Main {
         }
 
         System.out.println("\nDigite os números dos gêneros que você gosta separados por espaço.");
-        System.out.println("Exemplo: 1 2");
+        
+        System.out.println("Exemplo: \n1 \n2");
+        
 
         sc.nextLine();
         String entradaGeneros = sc.nextLine();
@@ -168,13 +163,6 @@ public class Main {
                 pesos1.put(generoSelecionado, 1.0);
             }
         }
-
-        int genero = sc.nextInt();
-
-        if (genero == 1) pesos1.put(Genero.ACAO, 1.0);
-        if (genero == 2) pesos1.put(Genero.FICCAO_CIENTIFICA, 1.0);
-        if (genero == 3) pesos1.put(Genero.DRAMA, 1.0);
-        if (genero == 4) pesos1.put(Genero.COMEDIA, 1.0);
 
         System.out.print("\nDuração mínima preferida: ");
         int duracaoMin = sc.nextInt();
