@@ -36,7 +36,7 @@ class CalculadoraScoreTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        80
+	        80, false, 0, 0
 	    );
 
 	    double score = calc.calcular(filme, perfil);
@@ -65,7 +65,7 @@ class CalculadoraScoreTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        80
+	        80, false, 0, 0
 	    );
 
 	    double score = calc.calcular(filme, perfil);
@@ -94,7 +94,7 @@ class CalculadoraScoreTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        50
+	        50, false, 0, 0
 	    );
 
 	    double score = calc.calcular(filme, perfil);
@@ -123,7 +123,7 @@ class CalculadoraScoreTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        100
+	        100, false, 0, 0
 	    );
 
 	    double score = calc.calcular(filme, perfil);

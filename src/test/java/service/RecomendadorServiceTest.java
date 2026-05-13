@@ -21,23 +21,26 @@ import util.GeradorAleatorio;
 @ExtendWith(MockitoExtension.class)
 class RecomendadorServiceTest {
 
-	@Mock
-	private CatalogoFilmesAPI catalogo;
+    @Mock
+    private CatalogoFilmesAPI catalogo;
 
-	@Mock
-	private HistoricoUsuarioRepository historico;
+    @Mock
+    private HistoricoUsuarioRepository historico;
 
-	@Mock
-	private NotificadorPush notificador;
+    @Mock
+    private NotificadorPush notificador;
 
-	@Mock
-	private GeradorAleatorio gerador;
-	
-	@Spy
-	private CalculadoraScore calculadora = new CalculadoraScore();
+    @Mock
+    private GeradorAleatorio gerador;
+
+    @Mock
+    private FiltroCapsulaTempo filtroCapsula;
+
+    @Spy
+    private CalculadoraScore calculadora = new CalculadoraScore();
 
     private RecomendadorService service;
-    
+
     private Usuario usuario;
 
     @BeforeEach
@@ -48,7 +51,8 @@ class RecomendadorServiceTest {
             notificador,
             gerador,
             calculadora,
-            new FiltroFilmes()
+            new FiltroFilmes(), 
+            filtroCapsula
         );
 
         Map<Genero, Double> pesos = new HashMap<>();
@@ -85,12 +89,9 @@ class RecomendadorServiceTest {
     @Test
     void deve_RetornarTopN_Quando_CatalogoTemMaisFilmes() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
-            new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
-            new Filme("F2", "Filme 2", 100, List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80),
-            new Filme("F3", "Filme 3", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+            criarFilme("F1", "Filme 1", Genero.ACAO, 70, 2010, 8.0),
+            criarFilme("F2", "Filme 2", Genero.DRAMA, 80, 2011, 8.0),
+            criarFilme("F3", "Filme 3", Genero.ACAO, 90, 2012, 8.0)
         ));
 
         List<Recomendacao> resultado = service.recomendar(usuario, 2);
@@ -102,10 +103,8 @@ class RecomendadorServiceTest {
     @Test
     void deve_OrdenarPorScoreDesc_Quando_Recomendar() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
-            new Filme("F1", "Baixo", 100, List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 50),
-            new Filme("F2", "Alto", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+            criarFilme("F1", "Baixo", Genero.DRAMA, 50, 2010, 7.0),
+            criarFilme("F2", "Alto", Genero.ACAO, 90, 2010, 9.0)
         ));
 
         List<Recomendacao> resultado = service.recomendar(usuario, 2);
@@ -127,10 +126,8 @@ class RecomendadorServiceTest {
     @Test
     void deve_RetornarFilmeAleatorio_Quando_SurpreendaMe() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
-            new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
-            new Filme("F2", "Filme 2", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80)
+            criarFilme("F1", "Filme 1", Genero.ACAO, 70, 2010, 8.0),
+            criarFilme("F2", "Filme 2", Genero.ACAO, 80, 2011, 8.0)
         ));
 
         when(gerador.sortearInteiro(0, 1)).thenReturn(1);
@@ -140,18 +137,17 @@ class RecomendadorServiceTest {
         assertNotNull(resultado);
         assertEquals("F2", resultado.getFilme().getId());
     }
+
     @Test
     void deve_CapturarRecomendacoesRegistradas_Quando_Recomendar() {
         when(catalogo.buscarTodos()).thenReturn(List.of(
-            new Filme("F1", "Filme 1", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 70),
-            new Filme("F2", "Filme 2", 100, List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 80),
-            new Filme("F3", "Filme 3", 100, List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS, Idioma.INGLES, 90)
+            criarFilme("F1", "Filme 1", Genero.ACAO, 70, 2010, 8.0),
+            criarFilme("F2", "Filme 2", Genero.DRAMA, 80, 2011, 8.0),
+            criarFilme("F3", "Filme 3", Genero.ACAO, 90, 2012, 8.0)
         ));
 
-        ArgumentCaptor<List<Recomendacao>> captor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List<Recomendacao>> captor =
+            ArgumentCaptor.forClass(List.class);
 
         service.recomendar(usuario, 2);
 
@@ -165,26 +161,57 @@ class RecomendadorServiceTest {
             () -> assertTrue(registradas.get(0).getScore() >= registradas.get(1).getScore())
         );
     }
+
     @Test
     void deve_ChamarCalculadora_ParaCadaFilmeFiltrado() {
-
         when(catalogo.buscarTodos()).thenReturn(List.of(
-            new Filme("F1", "Filme 1", 100,
-                List.of(Genero.ACAO),
-                ClassificacaoEtaria.DEZESSEIS,
-                Idioma.INGLES,
-                70),
-
-            new Filme("F2", "Filme 2", 100,
-                List.of(Genero.DRAMA),
-                ClassificacaoEtaria.DEZESSEIS,
-                Idioma.INGLES,
-                80)
+            criarFilme("F1", "Filme 1", Genero.ACAO, 70, 2010, 8.0),
+            criarFilme("F2", "Filme 2", Genero.DRAMA, 80, 2011, 8.0)
         ));
 
         service.recomendar(usuario, 2);
 
         verify(calculadora, times(2))
             .calcular(any(Filme.class), eq(usuario.getPerfil()));
+    }
+
+    @Test
+    void deve_ChamarFiltroCapsulaPorAno_Quando_RecomendarPorAno() {
+        Filme filme = criarFilme("F1", "Filme 2010", Genero.ACAO, 80, 2010, 8.5);
+
+        when(catalogo.buscarTodos()).thenReturn(List.of(filme));
+
+        when(filtroCapsula.filtrarPorAno(anyList(), eq(2010)))
+            .thenReturn(List.of(filme));
+
+        List<Recomendacao> resultado =
+            service.recomendarPorAno(usuario, 2010, 5);
+
+        assertEquals(1, resultado.size());
+        assertNotNull(resultado.get(0));;
+
+        verify(filtroCapsula).filtrarPorAno(anyList(), eq(2010));
+    }
+
+    private Filme criarFilme(
+        String id,
+        String titulo,
+        Genero genero,
+        int popularidade,
+        int anoLancamento,
+        double avaliacao
+    ) {
+        return new Filme(
+            id,
+            titulo,
+            100,
+            List.of(genero),
+            ClassificacaoEtaria.DEZESSEIS,
+            Idioma.INGLES,
+            popularidade,
+            false,
+            anoLancamento,
+            avaliacao
+        );
     }
 }

@@ -23,4 +23,8 @@ public class Recomendacao {
     public String getJustificativa() {
         return justificativa;
     }
+
+	public Object getMotivo() {
+		return null;
+	}
 }

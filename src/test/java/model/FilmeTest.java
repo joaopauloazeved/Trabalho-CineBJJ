@@ -20,7 +20,7 @@ class FilmeTest {
             List.of(Genero.FICCAO_CIENTIFICA, Genero.DRAMA),
             ClassificacaoEtaria.QUATORZE,
             Idioma.INGLES,
-            92
+            92, false, 0, 0
         );
 
         assertAll(
@@ -42,7 +42,7 @@ class FilmeTest {
             List.of(Genero.FICCAO_CIENTIFICA),
             ClassificacaoEtaria.QUATORZE,
             Idioma.INGLES,
-            92
+            92, false, 0, 0
         );
 
         Filme filme2 = new Filme(
@@ -52,7 +52,7 @@ class FilmeTest {
             List.of(Genero.COMEDIA),
             ClassificacaoEtaria.LIVRE,
             Idioma.PORTUGUES,
-            50
+            50, false, 0, 0
         );
 
         assertEquals(filme1, filme2);

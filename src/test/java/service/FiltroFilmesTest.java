@@ -35,7 +35,7 @@ class FiltroFilmesTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        80
+	        80, false, 0, 0
 	    );
 
 	    perfil.marcarAssistido("F1");
@@ -66,7 +66,7 @@ class FiltroFilmesTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZOITO,
 	        Idioma.INGLES,
-	        80
+	        80, false, 0, 0
 	    );
 
 	    List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
@@ -95,7 +95,7 @@ class FiltroFilmesTest {
 	        List.of(Genero.ACAO),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        80
+	        80, false, 0, 0
 	    );
 
 	    List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
@@ -124,7 +124,7 @@ class FiltroFilmesTest {
 	        List.of(Genero.TERROR),
 	        ClassificacaoEtaria.DEZESSEIS,
 	        Idioma.INGLES,
-	        80
+	        80, false, 0, 0
 	    );
 
 	    List<Filme> resultado = filtro.filtrar(List.of(filme), perfil);
