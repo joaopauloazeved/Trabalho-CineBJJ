@@ -2,6 +2,8 @@
 
 Sistema de recomendação de filmes desenvolvido em Java, utilizando perfis de usuário, filtros personalizados e cálculo de pontuação para sugerir conteúdos compatíveis com os gostos do usuário.
 
+"Mais finalizações que exceptions"
+
 ---
 
 # 📌 Descrição do Projeto
@@ -81,7 +83,7 @@ Além de enums e exceções customizadas para validação do sistema.
 - Histórico de recomendações
 - Filtro por gênero
 - Filtro por duração
-- Filtro por década/ano
+- Filtro por ano
 - Testes automatizados
 
 ---
