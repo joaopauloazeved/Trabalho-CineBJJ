@@ -106,62 +106,22 @@ cd CineBJJ
 
 ---
 
-## 3. Compilar o projeto
+## 3. Rodar o projeto
 
 ```bash
-mvn clean install
+Run As > Java Application
 ```
 
 ---
 
-## 4. Executar a aplicação
+## 4. Rodar os testes
 
 ```bash
-mvn exec:java
-```
-
-Caso exista uma classe principal específica:
-
-```bash
-java NomeDaClasseMain
+Run As > JUnit Test
 ```
 
 ---
 
-# 🧪 Como Rodar os Testes
-
-Para executar todos os testes:
-
-```bash
-mvn test
-```
-
----
-
-# 📊 Gerar relatório de cobertura com JaCoCo
-
-```bash
-mvn clean test
-```
-
-Após executar, abra o arquivo:
-
-```text
-target/site/jacoco/index.html
-```
-
-no navegador para visualizar a cobertura de testes.
-
----
-
-# 🧪 Testes
-
-O projeto possui testes unitários utilizando:
-
-- JUnit 5
-- Mockito
-
----
 
 # 📋 Cenários de Teste
 
