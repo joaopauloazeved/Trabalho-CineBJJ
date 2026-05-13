@@ -170,3 +170,17 @@ O projeto foi desenvolvido com foco acadêmico para aplicação de conceitos de:
 - testes e qualidade de software;
 - modelagem UML;
 - boas práticas em Java.
+  
+---
+
+# Testes com JUnit
+  
+![Logo](https://media.discordapp.net/attachments/1499842095136112913/1504166690815086814/A36FA2C6-FAFF-42C8-8C17-01ADA448AE5F.png?ex=6a05ffe5&is=6a04ae65&hm=369ac6e2fea5ec5ef3d3e3f31c348b92ceb31ad7ab9d9acabf4d20b5a034abb0&=&format=webp&quality=lossless&width=279&height=265)
+
+---
+
+# Teste com Jacoco
+
+![Logo](https://media.discordapp.net/attachments/1499842095136112913/1504166897510387773/92EFC5FA-13BA-410F-B0BF-195B03C4D859.png?ex=6a060016&is=6a04ae96&hm=ba3191dd0a0d4742f90366ff87aa877100f7241690cda23f9855da56cabd9988&=&format=webp&quality=lossless&width=1508&height=191)
+
+
