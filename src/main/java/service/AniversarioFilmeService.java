@@ -57,7 +57,7 @@ public class AniversarioFilmeService {
                     idadeFilme % 5 == 0;
 
             boolean filmeBemAvaliado =
-                    filme.getAvaliacao() >= 8.0;
+                    filme.getAvaliacao() >= 4.0;
 
             boolean filmePremiado =
                     filme.isPremiado();

@@ -18,24 +18,22 @@ public class RecomendadorService {
     private final GeradorAleatorio gerador;
     private final CalculadoraScore calculadora;
     private final FiltroFilmes filtro;
-    private final FiltroCapsulaTempo filtroCapsula;
+    private FiltroCapsulaTempo filtroCapsula = new FiltroCapsulaTempo();
+    
 
-    public RecomendadorService(CatalogoFilmesAPI catalogo,
-                               HistoricoUsuarioRepository historico,
-                               NotificadorPush notificador,
-                               GeradorAleatorio gerador,
-                               CalculadoraScore calculadora,
-                               FiltroFilmes filtro,
-                               FiltroCapsulaTempo filtroCapsula) {
-        this.catalogo = catalogo;
-        this.historico = historico;
-        this.notificador = notificador;
-        this.gerador = gerador;
-        this.calculadora = calculadora;
-        this.filtro = filtro;
-        this.filtroCapsula = filtroCapsula;
-    }
+	public RecomendadorService(CatalogoFilmesAPI catalogo, HistoricoUsuarioRepository historico,
+			NotificadorPush notificador, GeradorAleatorio gerador, CalculadoraScore calculadora, FiltroFilmes filtro,
+			FiltroCapsulaTempo filtroCapsula) {
 
+		this.catalogo = catalogo;
+		this.historico = historico;
+		this.notificador = notificador;
+		this.gerador = gerador;
+		this.calculadora = calculadora;
+		this.filtro = filtro;
+		this.filtroCapsula = filtroCapsula;
+	}
+	
     public List<Recomendacao> recomendar(Usuario usuario, int topN) {
         try {
             List<Filme> filmesDoCatalogo = catalogo.buscarTodos();
@@ -55,7 +53,7 @@ public class RecomendadorService {
                 Comparator.comparing(Recomendacao::getScore).reversed()
                     .thenComparing(r -> r.getFilme().getPopularidade(), Comparator.reverseOrder())
                     .thenComparing(r -> gerador.sortearInteiro(0, 100))
-            );
+            ); 
 
             List<Recomendacao> resultado;
 
@@ -96,35 +94,47 @@ public class RecomendadorService {
         return new Recomendacao(escolhido, score, "Modo surpresa");
     }
     
-    public List<Recomendacao> recomendarPorAno(Usuario usuario,
+    public List<Recomendacao> recomendarPorAno(
+            Usuario usuario,
             int ano,
-            int topN) {
+            int topN
+    ) {
 
-    	List<Filme> filmesDoCatalogo = catalogo.buscarTodos();
+        List<Filme> filmes = catalogo.buscarTodos();
 
-    		PerfilCinefilo perfil = usuario.getPerfil();
+        List<Filme> filtrados =
+                filtroCapsula.filtrarPorAno(filmes, ano);
 
-		List<Filme> filmesFiltrados =
-			filtro.filtrar(filmesDoCatalogo, perfil);
-			
-		List<Filme> filmesDoAno =
-			filtroCapsula.filtrarPorAno(filmesFiltrados, ano);
-			
-		List<Recomendacao> recomendacoes = new ArrayList<>();
-			
-		for (Filme filme : filmesDoAno) {
-			double score = calculadora.calcular(filme, perfil);
-			
-			recomendacoes.add(
-			new Recomendacao(filme,score,"Cápsula do Tempo: " + ano));
-			}
-			
-			recomendacoes.sort(Comparator.comparing(Recomendacao::getScore).reversed().thenComparing(r -> r.getFilme().getAvaliacao(),Comparator.reverseOrder()).thenComparing(r -> r.getFilme().getPopularidade(),Comparator.reverseOrder()));
-			
-			if (recomendacoes.size() > topN) {
-				return new ArrayList<>(recomendacoes.subList(0, topN));
-			}
-			
-				return recomendacoes;
+        List<Recomendacao> recomendacoes =
+                new ArrayList<>();
+
+        for (Filme filme : filtrados) {
+
+            double score =
+                    calculadora.calcular(
+                            filme,
+                            usuario.getPerfil()
+                    );
+
+            recomendacoes.add(
+                    new Recomendacao(
+                            filme,
+                            score,
+                            "Filmes do ano " + ano
+                    )
+            );
+        }
+
+        recomendacoes.sort(
+                Comparator.comparing(
+                        Recomendacao::getScore
+                ).reversed()
+        );
+
+        if (recomendacoes.size() > topN) {
+            return recomendacoes.subList(0, topN);
+        }
+
+        return recomendacoes;
     }
 }
