@@ -2,7 +2,7 @@
 
 Sistema de recomendação de filmes desenvolvido em Java, utilizando perfis de usuário, filtros personalizados e cálculo de pontuação para sugerir conteúdos compatíveis com os gostos do usuário.
 
-"Mais finalizações que exceptions"
+“Ajudamos você a Descobrir o passado”
 
 ---
 
